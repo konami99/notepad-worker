@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  worker-orders:
+    container_name: worker-orders
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=dev
+    ports:
+      - '3003:3003'
+    volumes:
+      - ./orders:/src
+      - /src/node_modules
+    build:
+      context: ./orders/
+    command: npm run dev
+  elasticmq:
+    image: softwaremill/elasticmq
+    container_name: elasticmq
+    ports:
+      - '9324:9324'
