@@ -8,10 +8,10 @@ services:
     ports:
       - '3003:3003'
     volumes:
-      - ./orders:/src
+      - .:/src
       - /src/node_modules
     build:
-      context: ./orders/
+      context: .
     command: npm run dev
   elasticmq:
     image: softwaremill/elasticmq
