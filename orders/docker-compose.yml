@@ -2,11 +2,11 @@ version: '3.9'
 services:
   worker-orders:
     container_name: worker-orders
-    restart: unless-stopped
+    restart: on-failure
     environment:
       - NODE_ENV=dev
-      - AWS_ACCESS_KEY_ID=na
-      - AWS_SECRET_ACCESS_KEY=na
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
       - SQS_ENDPOINT=http://elasticmq:9324
       - REGION=us-west-2
     ports:
@@ -17,8 +17,17 @@ services:
     build:
       context: .
     command: npm run dev
+    depends_on:
+      - elasticmq
   elasticmq:
     image: softwaremill/elasticmq
     container_name: elasticmq
     ports:
       - '9324:9324'
+    volumes:
+      - ./custom.conf:/opt/elasticmq.conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9324"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

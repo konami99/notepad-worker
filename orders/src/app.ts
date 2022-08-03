@@ -21,7 +21,7 @@ app.listen(port, async () => {
   });
   const out = await client.send(
     new ReceiveMessageCommand({
-      QueueUrl: '/12345/',
+      QueueUrl: '/1234567890/test_queue',
       WaitTimeSeconds: 10,
     })
   );
@@ -35,7 +35,7 @@ app.listen(port, async () => {
   // Process the message here.
 
   await client.send(new DeleteMessageCommand({
-    QueueUrl: '/12345/',
+    QueueUrl: '/1234567890/test_queue',
     ReceiptHandle: out.Messages[0].ReceiptHandle,
   }));
 });
