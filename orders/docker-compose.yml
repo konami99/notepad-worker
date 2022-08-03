@@ -5,6 +5,10 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=dev
+      - AWS_ACCESS_KEY_ID=na
+      - AWS_SECRET_ACCESS_KEY=na
+      - SQS_ENDPOINT=http://elasticmq:9324
+      - REGION=us-west-2
     ports:
       - '3003:3003'
     volumes:

@@ -1,0 +1,22 @@
+services:
+  elasticmq:
+    container_name: elasticmq
+    image: softwaremill/elasticmq
+    ports:
+    - published: 9324
+      target: 9324
+  worker-orders:
+    build:
+      context: /Users/richard/workspace/notepad-worker/orders
+    command: npm run dev
+    container_name: worker-orders
+    environment:
+      NODE_ENV: dev
+    ports:
+    - published: 3003
+      target: 3003
+    restart: unless-stopped
+    volumes:
+    - /Users/richard/workspace/notepad-worker/orders:/src:rw
+    - /src/node_modules
+version: '3.9'
