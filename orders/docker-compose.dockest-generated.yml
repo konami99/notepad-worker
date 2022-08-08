@@ -1,21 +1,39 @@
 services:
   elasticmq:
     container_name: elasticmq
+    healthcheck:
+      interval: 30s
+      retries: 5
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:9324
+      timeout: 10s
     image: softwaremill/elasticmq
     ports:
     - published: 9324
       target: 9324
+    volumes:
+    - /Users/richard/workspace/notepad-worker/orders/custom.conf:/opt/elasticmq.conf:rw
   worker-orders:
     build:
       context: /Users/richard/workspace/notepad-worker/orders
     command: npm run dev
     container_name: worker-orders
+    depends_on:
+      elasticmq:
+        condition: service_started
     environment:
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
       NODE_ENV: dev
+      REGION: us-west-2
+      SQS_ENDPOINT: http://elasticmq:9324
     ports:
     - published: 3003
       target: 3003
-    restart: unless-stopped
+    restart: on-failure
     volumes:
     - /Users/richard/workspace/notepad-worker/orders:/src:rw
     - /src/node_modules

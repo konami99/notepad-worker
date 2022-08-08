@@ -4,11 +4,11 @@ import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk
 const app: Express = express();
 const port = 3003;
 
-/*
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server!');
+app.get('/', async (req: Request, res: Response) => {
+  
+
+  res.send('Express + TypeScript Server!<<<');
 });
-*/
 
 app.listen(port, async () => { 
   const client = new SQSClient({
